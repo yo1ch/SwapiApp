@@ -17,6 +17,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             app:layout_collapseMode="pin"
+            app:expanded="false"
             app:layout_scrollFlags="scroll|exitUntilCollapsed"
             app:titleEnabled="false">
 
@@ -32,8 +33,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginHorizontal="8dp"
-                    android:background="@android:color/transparent"
-                    android:elevation="0dp"
+                    app:boxBackgroundColor="@android:color/transparent"
                     app:boxStrokeWidth="0dp"
                     app:endIconTint="?attr/colorOnPrimary">
 

@@ -33,7 +33,6 @@
                     android:layout_height="wrap_content"
                     android:layout_marginHorizontal="8dp"
                     android:background="@android:color/transparent"
-                    android:elevation="0dp"
                     app:boxStrokeWidth="0dp"
                     app:endIconTint="?attr/colorOnPrimary">
 
