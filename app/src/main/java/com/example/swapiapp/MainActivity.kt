@@ -2,12 +2,9 @@ package com.example.swapiapp
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.transition.AutoTransition
-import android.transition.Fade
-import androidx.navigation.NavOptions
-import androidx.navigation.findNavController
-import androidx.navigation.ui.setupWithNavController
-import com.google.android.material.bottomnavigation.BottomNavigationMenuView
+import androidx.fragment.app.Fragment
+import com.example.feature.presentation.favoritefragment.FavoriteFragment
+import com.example.feature.presentation.mainfragment.MainFragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
 
 class MainActivity : AppCompatActivity() {
@@ -15,11 +12,22 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         val bottomNavigationView = findViewById<BottomNavigationView>(R.id.bottom_navigation)
-        val navController = findNavController(R.id.fragmentContainerView)
-        bottomNavigationView.setupWithNavController(navController)
+        setCurrentFragment(MainFragment())
+        bottomNavigationView.setOnItemSelectedListener {
+            when(it.itemId){
+                R.id.mainFragment -> setCurrentFragment(MainFragment())
+                R.id.favoriteFragment -> setCurrentFragment(FavoriteFragment())
+            }
+            true
+        }
+
+
     }
-
-
+    private fun setCurrentFragment(fragment: Fragment) =
+        supportFragmentManager.beginTransaction().apply {
+            replace(R.id.fragmentContainerView, fragment)
+            commit()
+        }
     override fun onStart() {
         super.onStart()
         SwapiApplication.initialize(this)

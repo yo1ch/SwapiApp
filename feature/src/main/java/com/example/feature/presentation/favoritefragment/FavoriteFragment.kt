@@ -34,7 +34,7 @@ class FavoriteFragment : Fragment() {
         super.onResume()
         val sample = resources.getStringArray(R.array.search_categories)
         val arrayAdapter = ArrayAdapter(requireContext(), R.layout.dropdown_item, sample)
-        binding.autoCompleteTextview.setText(sample[0])
+        binding.autoCompleteTextview.setText(sample[2])
         binding.autoCompleteTextview.setAdapter(arrayAdapter)
     }
 
