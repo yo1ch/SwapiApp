@@ -1,46 +1,62 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.google.android.material.card.MaterialCardView
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="101dp"
-    app:cardElevation="0dp"
-    app:cardCornerRadius="12dp">
+    android:layout_height="wrap_content"
+    android:clickable="true"
+    app:cardCornerRadius="12dp"
+    app:cardElevation="0dp">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@drawable/cards_background">
+        android:background="@drawable/cards_background"
+        android:paddingHorizontal="8dp"
+        android:paddingVertical="8dp">
+
+        <com.google.android.material.button.MaterialButton
+            android:backgroundTint="@android:color/transparent"
+            android:id="@+id/bookmark"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:elevation="0dp"
+            android:paddingBottom="6dp"
+            android:stateListAnimator="@null"
+            app:elevation="0dp"
+            app:icon="@drawable/face_selector"
+            app:iconGravity="top"
+            app:iconTint="@color/design_default_color_primary"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
             android:id="@+id/name"
-            android:textColor="#000000"
-            android:textSize="18sp"
-            android:text="Люк скайвокер"
-            android:layout_marginHorizontal="8dp"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:text="Люк скайвокер"
+            android:textColor="#000000"
+            android:textSize="18sp"
             app:layout_constraintBottom_toTopOf="@+id/gender"
-            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/bookmark"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
             android:id="@+id/gender"
-            android:text="Мужик"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:text="Мужик"
             app:layout_constraintBottom_toTopOf="@+id/aircraft_count"
             app:layout_constraintEnd_toEndOf="@id/name"
             app:layout_constraintStart_toStartOf="@+id/name"
             app:layout_constraintTop_toBottomOf="@+id/name" />
 
         <TextView
-            android:text="3 корабля"
             android:id="@+id/aircraft_count"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:text="3 корабля"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="@id/name"
             app:layout_constraintStart_toStartOf="@+id/name"

@@ -1,5 +1,6 @@
 package com.example.feature.data.remote
 
+import com.example.feature.data.remote.dto.FilmsResponse
 import com.example.feature.data.remote.dto.PeopleResponse
 import com.example.feature.data.remote.dto.PlanetsResponse
 import com.example.feature.data.remote.dto.StarshipsResponse
@@ -21,5 +22,7 @@ interface WebApi {
     suspend fun getStarships(
         @Query("search") search: String
     ): Response<StarshipsResponse>
+    @GET("films")
+    suspend fun getFilms(): Response<FilmsResponse>
 
 }

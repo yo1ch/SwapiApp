@@ -5,4 +5,5 @@ data class Starship(
     val model: String,
     val manufacturer: String,
     val passengers: String,
+    val films: List<String>
 )

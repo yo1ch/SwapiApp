@@ -10,9 +10,10 @@ import com.example.feature.domain.entity.Starship
 
 fun CharacterDto.toCharacter(): Character =
     Character(
-        name = name ?: "Unknown name",
-        gender = gender ?: "Gender unknown",
-        count = this.starships?.size ?: 0
+        name = name,
+        gender = gender,
+        count = starships.size,
+        films = films,
     )
 
 fun PlanetDto.toPlanet(): Planet =
@@ -20,6 +21,7 @@ fun PlanetDto.toPlanet(): Planet =
         name = name,
         population = population,
         diameter = diameter,
+        films = films,
     )
 
 fun StarshipDto.toStarship(): Starship =
@@ -28,4 +30,7 @@ fun StarshipDto.toStarship(): Starship =
         manufacturer = manufacturer,
         passengers = passengers,
         model = model,
+        films = films,
     )
+
+

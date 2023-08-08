@@ -10,6 +10,7 @@ import com.example.feature.databinding.StarshipItemBinding
 
 class RvAdapter: ListAdapter<DataModel, BaseViewHolder<*>>(DiffUtilCallback) {
 
+    var onClickListener: ((DataModel, Boolean) -> Unit)? = null
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BaseViewHolder<*> {
         return when(viewType){
             ViewType.Character.ordinal -> {
@@ -43,12 +44,20 @@ class RvAdapter: ListAdapter<DataModel, BaseViewHolder<*>>(DiffUtilCallback) {
                 holder.binding.name.text = item.character.name
                 holder.binding.gender.text = item.character.gender
                 holder.binding.aircraftCount.text = item.character.count.toString()
+                holder.binding.root.setOnClickListener {
+                    holder.binding.bookmark.isActivated = !holder.binding.bookmark.isActivated
+                    onClickListener?.invoke(item, holder.binding.bookmark.isActivated)
+                }
             }
             is PlanetViewHolder ->{
                 val item = getItem(position) as DataModel.PlanetInfo
                 holder.binding.name.text = item.planet.name
                 holder.binding.population.text = item.planet.population
                 holder.binding.diameter.text = item.planet.diameter
+                holder.binding.root.setOnClickListener {
+                    holder.binding.bookmark.isActivated = !holder.binding.bookmark.isActivated
+                    onClickListener?.invoke(item, holder.binding.bookmark.isActivated)
+                }
             }
             is StarshipViewHolder ->{
                 val item = getItem(position) as DataModel.StarshipInfo
@@ -56,6 +65,10 @@ class RvAdapter: ListAdapter<DataModel, BaseViewHolder<*>>(DiffUtilCallback) {
                 holder.binding.manufacturer.text = item.starship.manufacturer
                 holder.binding.model.text = item.starship.model
                 holder.binding.passengers.text = item.starship.passengers
+                holder.binding.root.setOnClickListener {
+                    holder.binding.bookmark.isActivated = !holder.binding.bookmark.isActivated
+                    onClickListener?.invoke(item, holder.binding.bookmark.isActivated)
+                }
             }
         }
 

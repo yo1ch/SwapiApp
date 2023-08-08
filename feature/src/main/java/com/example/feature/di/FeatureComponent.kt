@@ -3,14 +3,17 @@ package com.example.feature.di
 import android.content.Context
 import com.example.feature.presentation.favoritefragment.FavoriteFragment
 import com.example.feature.presentation.mainfragment.MainFragment
+import dagger.BindsInstance
 import dagger.Component
 
 @Component(
-    modules = [ViewModelModule::class, UseCaseModule::class],
+    modules = [ViewModelModule::class, UseCaseModule::class, DatabaseModule::class],
     dependencies = [FeatureDependenciesProvider::class])
 abstract class FeatureComponent {
     @Component.Builder
     interface Builder{
+        @BindsInstance
+        fun context(context: Context): Builder
         fun featureDependenciesProvider(
             featureDependenciesProvider: FeatureDependenciesProvider
         ): Builder
@@ -28,6 +31,7 @@ abstract class FeatureComponent {
                 featureComponent = DaggerFeatureComponent
                     .builder()
                     .featureDependenciesProvider(deps)
+                    .context(context.applicationContext)
                     .build()
             }
             return featureComponent!!

@@ -2,9 +2,14 @@ package com.example.feature.presentation.mainfragment
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.feature.domain.usecase.AddFavoriteUseCase
+import com.example.feature.domain.usecase.AddFavoriteUseCaseImpl
+import com.example.feature.domain.usecase.DeleteFavoriteUseCase
 import com.example.feature.domain.usecase.GetCharactersUseCase
 import com.example.feature.domain.usecase.GetPlanetUseCase
 import com.example.feature.domain.usecase.GetStarshipUseCase
+import com.example.feature.domain.usecase.SaveFilmsUseCase
+import com.example.feature.domain.usecase.SaveFilmsUseCaseImpl
 import com.example.feature.presentation.rvadapter.DataModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -15,12 +20,21 @@ class MainFragmentViewModel @Inject constructor(
     private val getCharactersUseCase: GetCharactersUseCase,
     private val getPlanetUseCase: GetPlanetUseCase,
     private val getStarshipUseCase: GetStarshipUseCase,
+    private val saveFilmsUseCase: SaveFilmsUseCase,
+    private val addFavoriteUseCase: AddFavoriteUseCase,
+    private val deleteFavoriteUseCase: DeleteFavoriteUseCase,
 ): ViewModel() {
 
     enum class SearchCategory(val title: String){
         Characters(title = "Characters"),
         Starships(title = "Starships"),
         Planets(title = "Planets")
+    }
+
+    init {
+        viewModelScope.launch {
+            saveFilmsUseCase()
+        }
     }
 
     private val _resultList: MutableStateFlow<List<DataModel>> = MutableStateFlow(emptyList())
@@ -47,7 +61,6 @@ class MainFragmentViewModel @Inject constructor(
             }
         }
     }
-
     private fun getPlanets(searchQuery: String){
         viewModelScope.launch {
             Result
@@ -59,7 +72,6 @@ class MainFragmentViewModel @Inject constructor(
             }
         }
     }
-
     private fun getStarships(searchQuery: String) {
         viewModelScope.launch {
             val result = getStarshipUseCase(searchQuery)
@@ -76,6 +88,13 @@ class MainFragmentViewModel @Inject constructor(
             SearchCategory.Starships -> getStarships(searchQuery)
             SearchCategory.Planets -> getPlanets(searchQuery)
             SearchCategory.Characters -> getCharacters(searchQuery)
+        }
+    }
+
+    fun toggleFavorite(dataModel: DataModel, favoriteState: Boolean){
+        viewModelScope.launch {
+            if(favoriteState) addFavoriteUseCase(dataModel)
+            else deleteFavoriteUseCase(dataModel)
         }
     }
 }

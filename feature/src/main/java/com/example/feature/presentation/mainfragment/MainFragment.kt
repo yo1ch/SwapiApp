@@ -86,7 +86,11 @@ class MainFragment : Fragment() {
         with(binding.recyclerview) {
             recyclerViewAdapter = RvAdapter()
             adapter = recyclerViewAdapter
+
             addItemDecoration(VerticalDecorator(8, 8, 76, 16, 16))
+        }
+        recyclerViewAdapter.onClickListener = { dataModel, favoriteState ->
+            viewModel.toggleFavorite(dataModel,favoriteState)
         }
     }
     private fun setupDropdownMenu(){
