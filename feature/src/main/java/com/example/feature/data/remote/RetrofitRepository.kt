@@ -34,8 +34,9 @@ class RetrofitRepository @Inject constructor(
             try {
                 val response = webApi.getCharacters(searchQuery)
                 return@withContext response.toResult().map {
-                    it.results.map {
-                        it.toCharacter()
+                    it.results.map { characterDto ->
+                        val isFavorite = featureDao.isCharacterInFavorite(characterDto.name) > 0
+                        characterDto.toCharacter(isFavorite)
                     }
                 }
             } catch (e: Exception) {

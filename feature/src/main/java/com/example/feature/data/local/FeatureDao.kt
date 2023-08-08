@@ -21,25 +21,19 @@ interface FeatureDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun addFavoriteCharacter(characterEntity: CharacterEntity)
-
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun addFavoritePlanet(planetEntity: PlanetEntity)
-
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun addFavoriteStarship(starshipEntity: StarshipEntity)
-
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun saveFilms(filmEntity: FilmEntity)
-
     @Delete
     suspend fun deleteFavoriteCharacter(characterEntity: CharacterEntity)
-
     @Delete
     suspend fun deleteFavoritePlanet(planetEntity: PlanetEntity)
 
     @Delete
     suspend fun deleteFavoriteStarship(starshipEntity: StarshipEntity)
-
 
     @Query("SELECT * FROM planet_table ORDER BY name ASC")
     fun getFavoritePlanets(): Flow<List<PlanetEntity>>
@@ -54,5 +48,15 @@ interface FeatureDao {
     fun getFilms(): Flow<List<FilmEntity>>
 
 
+
+
+    @Query("SELECT COUNT(*) FROM character_table WHERE name = :characterName")
+    suspend fun isCharacterInFavorite(characterName: String): Int
+
+    @Query("SELECT COUNT(*) FROM planet_table WHERE name = :planetName")
+    suspend fun isPlanetInFavorite(planetName: String): Int
+
+    @Query("SELECT COUNT(*) FROM starship_table WHERE name = :starshipName")
+    suspend fun isStarshipInFavorite(starshipName: String): Int
 
 }

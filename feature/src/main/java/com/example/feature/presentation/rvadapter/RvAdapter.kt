@@ -41,6 +41,7 @@ class RvAdapter: ListAdapter<DataModel, BaseViewHolder<*>>(DiffUtilCallback) {
         when(holder){
             is CharViewHolder -> {
                 val item = getItem(position) as DataModel.CharacterInfo
+                holder.binding.bookmark.isActivated = item.character.isFavorite
                 holder.binding.name.text = item.character.name
                 holder.binding.gender.text = item.character.gender
                 holder.binding.aircraftCount.text = item.character.count.toString()
@@ -51,6 +52,7 @@ class RvAdapter: ListAdapter<DataModel, BaseViewHolder<*>>(DiffUtilCallback) {
             }
             is PlanetViewHolder ->{
                 val item = getItem(position) as DataModel.PlanetInfo
+                holder.binding.bookmark.isActivated = item.planet.isFavorite
                 holder.binding.name.text = item.planet.name
                 holder.binding.population.text = item.planet.population
                 holder.binding.diameter.text = item.planet.diameter
@@ -61,6 +63,7 @@ class RvAdapter: ListAdapter<DataModel, BaseViewHolder<*>>(DiffUtilCallback) {
             }
             is StarshipViewHolder ->{
                 val item = getItem(position) as DataModel.StarshipInfo
+                holder.binding.bookmark.isActivated = item.starship.isFavorite
                 holder.binding.name.text = item.starship.name
                 holder.binding.manufacturer.text = item.starship.manufacturer
                 holder.binding.model.text = item.starship.model

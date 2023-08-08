@@ -8,12 +8,13 @@ import com.example.feature.domain.entity.Planet
 import com.example.feature.domain.entity.Starship
 
 
-fun CharacterDto.toCharacter(): Character =
+fun CharacterDto.toCharacter(isFavorite: Boolean): Character =
     Character(
         name = name,
         gender = gender,
         count = starships.size,
         films = films,
+        isFavorite = isFavorite
     )
 
 fun PlanetDto.toPlanet(): Planet =

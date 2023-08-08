@@ -4,5 +4,6 @@ data class Planet(
     val name: String,
     val diameter: String,
     val population: String,
-    val films: List<String>
+    val films: List<String>,
+    val isFavorite: Boolean = false,
 )
