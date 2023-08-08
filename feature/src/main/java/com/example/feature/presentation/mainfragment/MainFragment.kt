@@ -52,6 +52,7 @@ class MainFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         FeatureComponent.init(requireContext()).injectMainFragment(this)
+
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

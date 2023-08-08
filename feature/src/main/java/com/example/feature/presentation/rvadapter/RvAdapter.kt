@@ -33,7 +33,7 @@ class RvAdapter: ListAdapter<DataModel, BaseViewHolder<*>>(DiffUtilCallback) {
             else -> throw RuntimeException("Unknown view type: $viewType")
         }
     }
-    override fun getItemViewType(position: Int): Int {
+    override fun getItemViewType(position: Int): Int { 
         return when(getItem(position)){
             is DataModel.PlanetInfo -> ViewType.Planet.ordinal
             is DataModel.CharacterInfo -> ViewType.Character.ordinal

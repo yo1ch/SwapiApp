@@ -3,6 +3,8 @@ package com.example.feature.presentation.favoritefragment
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.feature.domain.entity.Character
+import com.example.feature.domain.entity.Film
 import com.example.feature.domain.usecase.AddFavoriteUseCase
 import com.example.feature.domain.usecase.DeleteFavoriteUseCase
 import com.example.feature.domain.usecase.GetCharactersUseCase
@@ -15,9 +17,13 @@ import com.example.feature.domain.usecase.favorites.GetFavoritePlanetsUseCase
 import com.example.feature.domain.usecase.favorites.GetFavoriteStarshipsUseCase
 import com.example.feature.presentation.mainfragment.MainFragmentViewModel
 import com.example.feature.presentation.rvadapter.DataModel
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -52,37 +58,76 @@ class FavoriteFragmentViewModel @Inject constructor(
     fun setSearchCategory(searchCategory: SearchCategory) {
         _searchCategory.value = searchCategory
     }
+
     private fun getCharacters() {
         viewModelScope.launch {
-            val result = getFavoriteCharactersUseCase()
-            result.collect { it ->
-                _resultList.value = it.map { DataModel.CharacterInfo(it) }
-            }
+            combine(getFavoriteCharactersUseCase(), getFilmsUseCase()) { characters, films ->
+                val resultList = mutableListOf<DataModel>()
+                films.forEach { film ->
+                    var setFilmFlag = -1
+                    characters.forEach { character ->
+                        if (character.films.contains(film.url)) {
+                            if (setFilmFlag < 0) {
+                                resultList.add(DataModel.FilmInfo(film))
+                                resultList.add(DataModel.CharacterInfo(character))
+                                setFilmFlag++
+                            } else resultList.add(DataModel.CharacterInfo(character))
+                        }
+                    }
+                }
+                _resultList.value = resultList
+            }.launchIn(CoroutineScope(Dispatchers.Default))
         }
     }
+
     private fun getPlanets() {
         viewModelScope.launch {
-            val result = getFavoritePlanetsUseCase()
-            result.collect { resultList ->
-                _resultList.value = resultList.map { DataModel.PlanetInfo(it) }
-            }
+            combine(getFavoritePlanetsUseCase(), getFilmsUseCase()) { planets, films ->
+                val resultList = mutableListOf<DataModel>()
+                films.forEach { film ->
+                    var setFilmFlag = -1
+                    planets.forEach { planet ->
+                        if (planet.films.contains(film.url)) {
+                            if (setFilmFlag < 0) {
+                                resultList.add(DataModel.FilmInfo(film))
+                                resultList.add(DataModel.PlanetInfo(planet))
+                                setFilmFlag++
+                            } else resultList.add(DataModel.PlanetInfo(planet))
+                        }
+                    }
+                }
+                _resultList.value = resultList
+            }.launchIn(CoroutineScope(Dispatchers.Default))
         }
     }
 
     private fun getStarships() {
         viewModelScope.launch {
-            val result = getFavoriteStarshipsUseCase()
-            result.collect { resultList ->
-                _resultList.value = resultList.map { DataModel.StarshipInfo(it) }
-            }
+            combine(getFavoriteStarshipsUseCase(), getFilmsUseCase()) { starships, films ->
+                val resultList = mutableListOf<DataModel>()
+                films.forEach { film ->
+                    var setFilmFlag = -1
+                    starships.forEach { starship ->
+                        if (starship.films.contains(film.url)) {
+                            if (setFilmFlag < 0) {
+                                resultList.add(DataModel.FilmInfo(film))
+                                resultList.add(DataModel.StarshipInfo(starship))
+                                setFilmFlag++
+                            } else resultList.add(DataModel.StarshipInfo(starship))
+                        }
+                    }
+                }
+                _resultList.value = resultList
+            }.launchIn(CoroutineScope(Dispatchers.Default))
         }
     }
 
-    fun removeFavorite(dataModel: DataModel){
+    fun removeFavorite(dataModel: DataModel) {
         viewModelScope.launch {
             deleteFavoriteUseCase(dataModel)
         }
     }
+
     fun getData(searchCategory: SearchCategory) {
         when (searchCategory) {
             SearchCategory.Starships -> getStarships()

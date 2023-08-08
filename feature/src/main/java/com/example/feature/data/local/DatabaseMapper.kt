@@ -76,4 +76,5 @@ fun FilmEntity.toFilm(): Film =
         name = name,
         director = director,
         producer = producer,
+        url = url,
     )
