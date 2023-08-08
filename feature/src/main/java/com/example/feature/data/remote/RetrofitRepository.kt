@@ -20,9 +20,9 @@ class RetrofitRepository @Inject constructor(
     }
 
 
-    override suspend fun getCharacters(): Result<List<Character>> = withContext(Dispatchers.IO) {
+    override suspend fun getCharacters(searchQuery: String): Result<List<Character>> = withContext(Dispatchers.IO) {
         try {
-            val response = webApi.getCharacters()
+            val response = webApi.getCharacters(searchQuery)
             return@withContext response.toResult().map {
                 it.results.map {
                     it.toCharacter()
@@ -34,9 +34,9 @@ class RetrofitRepository @Inject constructor(
 
     }
 
-    override suspend fun getPlanets(): Result<List<Planet>>  = withContext(Dispatchers.IO) {
+    override suspend fun getPlanets(searchQuery: String): Result<List<Planet>>  = withContext(Dispatchers.IO) {
         try {
-            val response = webApi.getPlanets()
+            val response = webApi.getPlanets(searchQuery)
             return@withContext response.toResult().map {
                 it.results.map {
                     it.toPlanet()
@@ -48,9 +48,9 @@ class RetrofitRepository @Inject constructor(
 
     }
 
-    override suspend fun getStarships(): Result<List<Starship>> = withContext(Dispatchers.IO) {
+    override suspend fun getStarships(searchQuery: String): Result<List<Starship>> = withContext(Dispatchers.IO) {
         try {
-            val response = webApi.getStarships()
+            val response = webApi.getStarships(searchQuery)
             return@withContext response.toResult().map {
                 it.results.map {
                     it.toStarship()

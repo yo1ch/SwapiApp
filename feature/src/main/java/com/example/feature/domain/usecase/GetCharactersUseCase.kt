@@ -4,6 +4,6 @@ import com.example.feature.domain.entity.Character
 
 interface GetCharactersUseCase {
 
-    suspend operator fun invoke():Result<List<Character>>
+    suspend operator fun invoke(searchQuery: String):Result<List<Character>>
 
 }

@@ -4,6 +4,6 @@ import com.example.feature.domain.entity.Starship
 
 interface GetStarshipUseCase {
 
-    suspend operator fun invoke(): Result<List<Starship>>
+    suspend operator fun invoke(searchQuery: String): Result<List<Starship>>
 
 }

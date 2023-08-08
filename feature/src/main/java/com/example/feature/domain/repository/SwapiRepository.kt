@@ -6,10 +6,10 @@ import com.example.feature.domain.entity.Starship
 
 interface SwapiRepository {
 
-    suspend fun getCharacters(): Result<List<Character>>
+    suspend fun getCharacters(searchQuery: String): Result<List<Character>>
 
-    suspend fun getPlanets(): Result<List<Planet>>
+    suspend fun getPlanets(searchQuery: String): Result<List<Planet>>
 
-    suspend fun getStarships(): Result<List<Starship>>
+    suspend fun getStarships(searchQuery: String): Result<List<Starship>>
 
 }

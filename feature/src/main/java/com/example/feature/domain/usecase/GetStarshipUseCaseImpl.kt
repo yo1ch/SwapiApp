@@ -7,5 +7,5 @@ import javax.inject.Inject
 class GetStarshipUseCaseImpl @Inject constructor(
     private val repository: SwapiRepository
 ): GetStarshipUseCase {
-    override suspend fun invoke(): Result<List<Starship>> = repository.getStarships()
+    override suspend fun invoke(searchQuery: String): Result<List<Starship>> = repository.getStarships(searchQuery)
 }

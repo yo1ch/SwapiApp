@@ -10,10 +10,16 @@ import retrofit2.http.Query
 interface WebApi {
 
     @GET("people")
-    suspend fun getCharacters(): Response<PeopleResponse>
+    suspend fun getCharacters(
+        @Query("search") search: String
+    ): Response<PeopleResponse>
     @GET("planets")
-    suspend fun getPlanets(): Response<PlanetsResponse>
+    suspend fun getPlanets(
+        @Query("search") search: String
+    ): Response<PlanetsResponse>
     @GET("starships")
-    suspend fun getStarships(): Response<StarshipsResponse>
+    suspend fun getStarships(
+        @Query("search") search: String
+    ): Response<StarshipsResponse>
 
 }

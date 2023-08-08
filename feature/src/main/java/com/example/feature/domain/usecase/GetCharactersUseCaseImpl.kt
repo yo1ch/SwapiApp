@@ -9,9 +9,9 @@ import javax.inject.Inject
 class GetCharactersUseCaseImpl @Inject constructor(
     private val repository: SwapiRepository
 ): GetCharactersUseCase {
-    override suspend fun invoke(): Result<List<Character>> = withContext(
+    override suspend fun invoke(searchQuery: String): Result<List<Character>> = withContext(
         Dispatchers.IO
     ) {
-        return@withContext repository.getCharacters()
+        return@withContext repository.getCharacters(searchQuery)
     }
 }

@@ -5,6 +5,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
+import android.widget.EditText
+import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
@@ -15,7 +17,16 @@ import com.example.feature.databinding.FragmentMainBinding
 import com.example.feature.di.FeatureComponent
 import com.example.feature.presentation.ViewModelFactory
 import com.example.feature.presentation.rvadapter.RvAdapter
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.debounce
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.filter
+import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import javax.inject.Inject
 
@@ -48,6 +59,7 @@ class MainFragment : Fragment() {
         viewModel = ViewModelProvider(this, viewModelFactory)[MainFragmentViewModel::class.java]
         setupRecyclerView()
         observeViewModel()
+        setupSearch()
     }
 
 
@@ -58,13 +70,13 @@ class MainFragment : Fragment() {
         viewModel.searchCategory.onEach {
             when(it){
                 MainFragmentViewModel.SearchCategory.Characters ->{
-                    setSearchHint("Search characters...", it.title)
+                    setSearchHint("Search characters...")
                 }
                 MainFragmentViewModel.SearchCategory.Planets ->{
-                    setSearchHint("Search planets...", it.title)
+                    setSearchHint("Search planets...")
                 }
                 MainFragmentViewModel.SearchCategory.Starships ->{
-                    setSearchHint("Search starships...", it.title)
+                    setSearchHint("Search starships...")
                 }
             }
         }.launchIn(lifecycleScope)
@@ -82,7 +94,7 @@ class MainFragment : Fragment() {
         val arrayAdapter = ArrayAdapter(requireContext(), R.layout.dropdown_item, categories)
         binding.autoCompleteTextview.setText(viewModel.getCurrentCategory().title)
         binding.autoCompleteTextview.setAdapter(arrayAdapter)
-        binding.autoCompleteTextview.setOnItemClickListener { parent, view, position, id ->
+        binding.autoCompleteTextview.setOnItemClickListener { parent, _, position, _ ->
             when(parent.getItemAtPosition(position).toString()){
                 MainFragmentViewModel.SearchCategory.Characters.title -> {
                     viewModel.setSearchCategory(MainFragmentViewModel.SearchCategory.Characters)
@@ -97,16 +109,38 @@ class MainFragment : Fragment() {
 
         }
     }
-    private fun setSearchHint(searchHint: String, searchCategory: String){
-        binding.search.hint = searchHint
+    private fun setSearchHint(searchHint: String){
+        binding.searchHint.text?.clear()
         binding.searchHint.hint = searchHint
+    }
+
+    private fun setupSearch() {
+        binding.search.editText!!.getQueryTextChangeStateFlow()
+            .debounce(500)
+            .filter { it.isNotEmpty() && it.length > 2 }
+            .distinctUntilChanged()
+            .flowOn(Dispatchers.Default)
+            .onEach { query ->
+                viewModel.getData(query, viewModel.getCurrentCategory())
+            }
+            .launchIn(lifecycleScope)
+    }
+
+    private fun EditText.getQueryTextChangeStateFlow(): StateFlow<String> {
+        val query = MutableStateFlow("")
+        addTextChangedListener { query.value = it.toString() }
+        return query
     }
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         _binding = FragmentMainBinding.inflate(layoutInflater, container, false)
         return binding.root
     }
 
+    override fun onDestroy() {
+        super.onDestroy()
+        _binding = null
+    }
 }

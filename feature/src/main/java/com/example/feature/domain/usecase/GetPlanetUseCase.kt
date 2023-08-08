@@ -4,6 +4,6 @@ import com.example.feature.domain.entity.Planet
 
 interface GetPlanetUseCase {
 
-    suspend operator fun invoke(): Result<List<Planet>>
+    suspend operator fun invoke(searchQuery: String): Result<List<Planet>>
 
 }

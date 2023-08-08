@@ -30,30 +30,16 @@ class MainFragmentViewModel @Inject constructor(
     private val _searchCategory: MutableStateFlow<SearchCategory> = MutableStateFlow(SearchCategory.Characters)
     val searchCategory: StateFlow<SearchCategory>
         get() = _searchCategory
-    init {
-        getCharacters()
-    }
 
     fun getCurrentCategory(): SearchCategory{
         return searchCategory.value
     }
     fun setSearchCategory(searchCategory: SearchCategory){
         _searchCategory.value = searchCategory
-        when(searchCategory){
-            SearchCategory.Characters -> {
-                getCharacters()
-            }
-            SearchCategory.Planets -> {
-                getPlanets()
-            }
-            SearchCategory.Starships -> {
-                getStarships()
-            }
-        }
     }
-    private fun getCharacters(){
+    private fun getCharacters(searchQuery: String){
         viewModelScope.launch {
-            val result = getCharactersUseCase()
+            val result = getCharactersUseCase(searchQuery)
             result.onSuccess {
             _resultList.emit(it.map {
                 DataModel.CharacterInfo(it)
@@ -62,9 +48,10 @@ class MainFragmentViewModel @Inject constructor(
         }
     }
 
-    private fun getPlanets(){
+    private fun getPlanets(searchQuery: String){
         viewModelScope.launch {
-            val result = getPlanetUseCase()
+            Result
+            val result = getPlanetUseCase(searchQuery)
             result.onSuccess {
                 _resultList.emit(it.map {
                     DataModel.PlanetInfo(it)
@@ -73,14 +60,22 @@ class MainFragmentViewModel @Inject constructor(
         }
     }
 
-    private fun getStarships(){
+    private fun getStarships(searchQuery: String) {
         viewModelScope.launch {
-            val result = getStarshipUseCase()
+            val result = getStarshipUseCase(searchQuery)
             result.onSuccess {
                 _resultList.emit(it.map {
                     DataModel.StarshipInfo(it)
                 })
             }
+        }
+    }
+
+    fun getData(searchQuery: String, searchCategory: SearchCategory){
+        when(searchCategory){
+            SearchCategory.Starships -> getStarships(searchQuery)
+            SearchCategory.Planets -> getPlanets(searchQuery)
+            SearchCategory.Characters -> getCharacters(searchQuery)
         }
     }
 }
