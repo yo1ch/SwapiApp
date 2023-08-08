@@ -10,29 +10,32 @@ import com.example.feature.domain.entity.Film
 import com.example.feature.domain.entity.Planet
 import com.example.feature.domain.entity.Starship
 
-fun CharacterEntity.toCharacter(): Character =
+fun CharacterEntity.toCharacter(isFavorite: Boolean = false): Character =
     Character(
         name = name,
         gender = gender,
         count = count,
         films = films,
+        isFavorite = isFavorite,
     )
 
-fun PlanetEntity.toPlanet(): Planet =
+fun PlanetEntity.toPlanet(isFavorite: Boolean = false): Planet =
     Planet(
         name = name,
         population = population,
         diameter = diameter,
         films = films,
+        isFavorite = isFavorite,
     )
 
-fun StarshipEntity.toStarship(): Starship =
+fun StarshipEntity.toStarship(isFavorite: Boolean = false): Starship =
     Starship(
         name = name,
         manufacturer = manufacturer,
         passengers = passengers,
         model = model,
         films = films,
+        isFavorite = isFavorite,
     )
 
 fun Character.toCharacterEntity(): CharacterEntity =

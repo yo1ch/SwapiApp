@@ -4,17 +4,24 @@ import android.util.Log
 import com.example.core.network.toResult
 import com.example.feature.data.local.FeatureDao
 import com.example.feature.data.local.FeatureDatabase
+import com.example.feature.data.local.toCharacter
 import com.example.feature.data.local.toCharacterEntity
+import com.example.feature.data.local.toFilm
 import com.example.feature.data.local.toFilmEntity
+import com.example.feature.data.local.toPlanet
 import com.example.feature.data.local.toPlanetEntity
+import com.example.feature.data.local.toStarship
 import com.example.feature.data.local.toStarshipEntity
 import com.example.feature.domain.entity.Character
+import com.example.feature.domain.entity.Film
 import com.example.feature.domain.entity.Planet
 import com.example.feature.domain.entity.Starship
 import com.example.feature.domain.repository.SwapiRepository
 import com.example.feature.presentation.rvadapter.DataModel
 import com.example.feature.presentation.rvadapter.RvAdapter
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.withContext
 import retrofit2.Retrofit
 import javax.inject.Inject
@@ -72,6 +79,38 @@ class RetrofitRepository @Inject constructor(
             }
 
         }
+
+    override fun getFavoriteCharacters(): Flow<List<Character>> {
+        return featureDao.getFavoriteCharacters().map {
+            it.map {
+                it.toCharacter(true)
+            }
+        }
+    }
+
+    override fun getFavoritePlanets(): Flow<List<Planet>> {
+        return featureDao.getFavoritePlanets().map {
+            it.map {
+                it.toPlanet(true)
+            }
+        }
+    }
+
+    override fun getFavoriteStarships(): Flow<List<Starship>> {
+        return featureDao.getFavoriteStarships().map {
+            it.map {
+                it.toStarship(true)
+            }
+        }
+    }
+
+    override fun getFilms(): Flow<List<Film>> {
+        return featureDao.getFilms().map {
+            it.map {
+                it.toFilm()
+            }
+        }
+    }
     override suspend fun saveFilms(): Result<Unit> =
         withContext(Dispatchers.IO) {
             return@withContext try {
@@ -102,6 +141,7 @@ class RetrofitRepository @Inject constructor(
             is DataModel.StarshipInfo -> {
                 featureDao.addFavoriteStarship(dataModel.starship.toStarshipEntity())
             }
+            is DataModel.FilmInfo -> {}
         }
     }
 
@@ -116,6 +156,7 @@ class RetrofitRepository @Inject constructor(
             is DataModel.StarshipInfo -> {
                 featureDao.deleteFavoriteStarship(dataModel.starship.toStarshipEntity())
             }
+            is DataModel.FilmInfo -> {}
         }
     }
 

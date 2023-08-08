@@ -1,5 +1,6 @@
 package com.example.feature.presentation.rvadapter
 
+import android.provider.ContactsContract.Data
 import androidx.recyclerview.widget.DiffUtil
 
 object DiffUtilCallback : DiffUtil.ItemCallback<DataModel>() {
@@ -16,6 +17,9 @@ object DiffUtilCallback : DiffUtil.ItemCallback<DataModel>() {
             is DataModel.StarshipInfo -> {
                 oldItem.starship.name == (newItem as DataModel.StarshipInfo).starship.name
             }
+            is DataModel.FilmInfo -> {
+                oldItem.film.name == (newItem as DataModel.FilmInfo).film.name
+            }
         }
     }
 
@@ -30,6 +34,9 @@ object DiffUtilCallback : DiffUtil.ItemCallback<DataModel>() {
             }
             is DataModel.StarshipInfo -> {
                 oldItem.starship == (newItem as DataModel.StarshipInfo).starship
+            }
+            is DataModel.FilmInfo -> {
+                oldItem.film == (newItem as DataModel.FilmInfo).film
             }
         }
     }

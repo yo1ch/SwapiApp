@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.ListAdapter
 import com.example.feature.databinding.CharacterItemBinding
+import com.example.feature.databinding.FilmItemBinding
 import com.example.feature.databinding.PlanetItemBinding
 import com.example.feature.databinding.StarshipItemBinding
 
@@ -25,6 +26,10 @@ class RvAdapter: ListAdapter<DataModel, BaseViewHolder<*>>(DiffUtilCallback) {
                 val starshipBinding = StarshipItemBinding.inflate(LayoutInflater.from(parent.context),parent,false)
                 StarshipViewHolder(starshipBinding)
             }
+            ViewType.Film.ordinal ->{
+                val filmBinding = FilmItemBinding.inflate(LayoutInflater.from(parent.context),parent,false)
+                FilmViewHolder(filmBinding)
+            }
             else -> throw RuntimeException("Unknown view type: $viewType")
         }
     }
@@ -33,7 +38,7 @@ class RvAdapter: ListAdapter<DataModel, BaseViewHolder<*>>(DiffUtilCallback) {
             is DataModel.PlanetInfo -> ViewType.Planet.ordinal
             is DataModel.CharacterInfo -> ViewType.Character.ordinal
             is DataModel.StarshipInfo -> ViewType.Starship.ordinal
-
+            is DataModel.FilmInfo -> ViewType.Film.ordinal
             else -> -1
         }
     }
@@ -73,6 +78,12 @@ class RvAdapter: ListAdapter<DataModel, BaseViewHolder<*>>(DiffUtilCallback) {
                     onClickListener?.invoke(item, holder.binding.bookmark.isActivated)
                 }
             }
+            is FilmViewHolder -> {
+                val item = getItem(position) as DataModel.FilmInfo
+                holder.binding.name.text = item.film.name
+                holder.binding.producer.text = item.film.producer
+                holder.binding.director.text = item.film.director
+            }
         }
 
     }
@@ -80,5 +91,6 @@ class RvAdapter: ListAdapter<DataModel, BaseViewHolder<*>>(DiffUtilCallback) {
         Planet,
         Character,
         Starship,
+        Film,
     }
 }
