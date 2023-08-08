@@ -135,6 +135,7 @@ class MainFragment : Fragment() {
             .distinctUntilChanged()
             .flowOn(Dispatchers.Default)
             .onEach { query ->
+                viewModel.setLoadingState()
                 viewModel.getData(query, viewModel.getCurrentCategory())
             }
             .launchIn(lifecycleScope)

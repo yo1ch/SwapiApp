@@ -75,7 +75,6 @@ class MainFragmentViewModel @Inject constructor(
     }
 
     private fun getPlanets(searchQuery: String) {
-        _resultList.value = DataState.Loading()
         viewModelScope.launch {
             Result
             val result = getPlanetUseCase(searchQuery)
@@ -92,7 +91,6 @@ class MainFragmentViewModel @Inject constructor(
     }
 
     private fun getStarships(searchQuery: String) {
-        _resultList.value = DataState.Loading()
         viewModelScope.launch {
             val result = getStarshipUseCase(searchQuery)
             result.onSuccess {
@@ -113,6 +111,10 @@ class MainFragmentViewModel @Inject constructor(
             SearchCategory.Planets -> getPlanets(searchQuery)
             SearchCategory.Characters -> getCharacters(searchQuery)
         }
+    }
+
+    fun setLoadingState(){
+        _resultList.value = DataState.Loading()
     }
 
     fun toggleFavorite(dataModel: DataModel, favoriteState: Boolean) {
