@@ -4,9 +4,9 @@
     
     
     <string-array name="search_categories">
-        <item>Персонажи</item>
-        <item>Корабли</item>
-        <item>Планеты</item>
+        <item>Characters</item>
+        <item>Starships</item>
+        <item>Planets</item>
     </string-array>
     
 </resources>

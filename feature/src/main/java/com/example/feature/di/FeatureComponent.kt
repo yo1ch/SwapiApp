@@ -6,7 +6,7 @@ import com.example.feature.presentation.mainfragment.MainFragment
 import dagger.Component
 
 @Component(
-    modules = [ViewModelModule::class,],
+    modules = [ViewModelModule::class, UseCaseModule::class],
     dependencies = [FeatureDependenciesProvider::class])
 abstract class FeatureComponent {
     @Component.Builder

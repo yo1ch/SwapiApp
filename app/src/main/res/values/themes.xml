@@ -29,4 +29,5 @@
     </style>
 
     <style name="Theme.SwapiApp" parent="Base.Theme.SwapiApp" />
+
 </resources>
