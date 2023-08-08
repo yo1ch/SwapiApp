@@ -17,21 +17,23 @@ fun CharacterDto.toCharacter(isFavorite: Boolean): Character =
         isFavorite = isFavorite
     )
 
-fun PlanetDto.toPlanet(): Planet =
+fun PlanetDto.toPlanet(isFavorite: Boolean): Planet =
     Planet(
         name = name,
         population = population,
         diameter = diameter,
         films = films,
+        isFavorite = isFavorite,
     )
 
-fun StarshipDto.toStarship(): Starship =
+fun StarshipDto.toStarship(isFavorite: Boolean): Starship =
     Starship(
         name = name,
         manufacturer = manufacturer,
         passengers = passengers,
         model = model,
         films = films,
+        isFavorite = isFavorite,
     )
 
 

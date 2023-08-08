@@ -56,8 +56,9 @@ class RetrofitRepository @Inject constructor(
             try {
                 val response = webApi.getPlanets(searchQuery)
                 return@withContext response.toResult().map {
-                    it.results.map {
-                        it.toPlanet()
+                    it.results.map {planetDto ->
+                        val isFavorite = featureDao.isPlanetInFavorite(planetDto.name) > 0
+                        planetDto.toPlanet(isFavorite)
                     }
                 }
             } catch (e: Exception) {
@@ -70,8 +71,9 @@ class RetrofitRepository @Inject constructor(
             try {
                 val response = webApi.getStarships(searchQuery)
                 return@withContext response.toResult().map {
-                    it.results.map {
-                        it.toStarship()
+                    it.results.map {starshipDto ->
+                        val isFavorite = featureDao.isStarshipInFavorite(starshipDto.name) > 0
+                        starshipDto.toStarship(isFavorite)
                     }
                 }
             } catch (e: Exception) {

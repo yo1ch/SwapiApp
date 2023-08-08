@@ -11,6 +11,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import com.example.core.network.ImageLoader
+import com.example.core.view.DataState
 import com.example.core.view.VerticalDecorator
 import com.example.feature.R
 import com.example.feature.databinding.FragmentMainBinding
@@ -66,7 +67,15 @@ class MainFragment : Fragment() {
 
     private fun observeViewModel() {
         viewModel.resultList.onEach {
-            recyclerViewAdapter.submitList(it)
+            when(it){
+                is DataState.Success -> {
+                    hideProgressBar()
+                    recyclerViewAdapter.submitList(it.data)
+                }
+                is DataState.Loading -> showProgressBar()
+                is DataState.Error -> {}
+            }
+
         }.launchIn(lifecycleScope)
         viewModel.searchCategory.onEach {
             when(it){
@@ -135,6 +144,16 @@ class MainFragment : Fragment() {
         val query = MutableStateFlow("")
         addTextChangedListener { query.value = it.toString() }
         return query
+    }
+
+    private fun hideProgressBar(){
+        binding.progressbar.visibility = View.GONE
+        binding.recyclerview.visibility = View.VISIBLE
+    }
+
+    private fun showProgressBar(){
+        binding.progressbar.visibility = View.VISIBLE
+        binding.recyclerview.visibility = View.GONE
     }
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
