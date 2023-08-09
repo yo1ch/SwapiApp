@@ -1,25 +1,15 @@
 package com.example.feature.presentation.favoritefragment
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.feature.domain.entity.Character
-import com.example.feature.domain.entity.Film
-import com.example.feature.domain.usecase.AddFavoriteUseCase
 import com.example.feature.domain.usecase.DeleteFavoriteUseCase
-import com.example.feature.domain.usecase.GetCharactersUseCase
 import com.example.feature.domain.usecase.GetFilmsUseCase
-import com.example.feature.domain.usecase.GetPlanetUseCase
-import com.example.feature.domain.usecase.GetStarshipUseCase
-import com.example.feature.domain.usecase.SaveFilmsUseCase
 import com.example.feature.domain.usecase.favorites.GetFavoriteCharactersUseCase
 import com.example.feature.domain.usecase.favorites.GetFavoritePlanetsUseCase
 import com.example.feature.domain.usecase.favorites.GetFavoriteStarshipsUseCase
-import com.example.feature.presentation.mainfragment.MainFragmentViewModel
 import com.example.feature.presentation.rvadapter.DataModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine
@@ -64,13 +54,13 @@ class FavoriteFragmentViewModel @Inject constructor(
             combine(getFavoriteCharactersUseCase(), getFilmsUseCase()) { characters, films ->
                 val resultList = mutableListOf<DataModel>()
                 films.forEach { film ->
-                    var setFilmFlag = -1
+                    var shouldShowFilmHeader = true
                     characters.forEach { character ->
                         if (character.films.contains(film.url)) {
-                            if (setFilmFlag < 0) {
+                            if (shouldShowFilmHeader) {
                                 resultList.add(DataModel.FilmInfo(film))
                                 resultList.add(DataModel.CharacterInfo(character))
-                                setFilmFlag++
+                                shouldShowFilmHeader = false
                             } else resultList.add(DataModel.CharacterInfo(character))
                         }
                     }
@@ -85,13 +75,13 @@ class FavoriteFragmentViewModel @Inject constructor(
             combine(getFavoritePlanetsUseCase(), getFilmsUseCase()) { planets, films ->
                 val resultList = mutableListOf<DataModel>()
                 films.forEach { film ->
-                    var setFilmFlag = -1
+                    var shouldShowFilmHeader = true
                     planets.forEach { planet ->
                         if (planet.films.contains(film.url)) {
-                            if (setFilmFlag < 0) {
+                            if (shouldShowFilmHeader) {
                                 resultList.add(DataModel.FilmInfo(film))
                                 resultList.add(DataModel.PlanetInfo(planet))
-                                setFilmFlag++
+                                shouldShowFilmHeader = false
                             } else resultList.add(DataModel.PlanetInfo(planet))
                         }
                     }
@@ -106,13 +96,13 @@ class FavoriteFragmentViewModel @Inject constructor(
             combine(getFavoriteStarshipsUseCase(), getFilmsUseCase()) { starships, films ->
                 val resultList = mutableListOf<DataModel>()
                 films.forEach { film ->
-                    var setFilmFlag = -1
+                    var shouldShowFilmHeader = true
                     starships.forEach { starship ->
                         if (starship.films.contains(film.url)) {
-                            if (setFilmFlag < 0) {
+                            if (shouldShowFilmHeader) {
                                 resultList.add(DataModel.FilmInfo(film))
                                 resultList.add(DataModel.StarshipInfo(starship))
-                                setFilmFlag++
+                                shouldShowFilmHeader = false
                             } else resultList.add(DataModel.StarshipInfo(starship))
                         }
                     }
